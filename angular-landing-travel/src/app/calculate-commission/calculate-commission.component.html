@@ -1,0 +1,52 @@
+<div class="form-group">
+    <label>Client type</label>
+    <select class="form-control" #cType>
+        <option selected value="0" disabled>Select...</option>
+        <option *ngFor = "let value of values" [value]="value">{{keys[value-1]}}</option>
+    </select>
+</div>
+<div class="form-group">
+    <label>Amount of passengers</label>
+    <input class="form-control" type="number" min="1" max="10" #passengers>
+</div>
+
+<div class="form-group">
+    <label>Duration of the trip</label>
+    <input class="form-control" type="number" min="1" max="60" #nights>
+</div>
+
+<div class="mt-3 d-flex">
+    <input #descriptionP type="text" class="form-control mr-3">
+    <button class="btn btn-primary" (click)="search(descriptionP.value)">Search</button>
+</div>
+<span *ngIf = "packages == null">Packages not found!</span>
+<div *ngIf="packages">
+    <ul class="list-group">
+        <li *ngFor="let package of packages" class="list-group-item">
+            <div class="d-flex align-items-center">
+                <span class="mr-auto">{{package.description}}</span>
+                <button class="btn btn-link" (click)="viewDetails(package.packageId)">View Details</button>
+                <button class="btn btn-link" (click)="addPackage(package)">Add</button>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div *ngIf="packagesAdded">
+    <ul class="mt-3 list-group">
+        <li *ngFor="let package of packagesAdded" class="list-group-item">
+            <div class="d-flex align-items-center">
+                <span class="mr-auto">{{package.description}}</span>
+                <button class="btn btn-link" (click)="removePackage(package)">Remove</button>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<app-detail-package [packageItemDTO]="packageDetails"></app-detail-package>
+
+<div class="d-inline-flex mt-3 mb-3 align-items-center">
+    <button class="btn btn-primary mr-1" (click) = "calculate(+cType.value, +passengers.value, +nights.value)">Calculate</button>
+    <span *ngIf = "error">{{error}}</span>
+    <span *ngIf = "commission">My commission is: ${{commission | number : '1.2-2'}}</span>
+</div>
